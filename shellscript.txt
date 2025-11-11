@@ -1,0 +1,210 @@
+#!/bin/bash
+is called a shebang (or hashbang). It appears at the very top of a script file and tells the operating system which interpreter should be used to execute the script.
+
+An interpreter is a program that reads and executes code directly, line by line, instead of compiling it into machine code first.
+
+command line arguments in bash is called as shell arguments, $0 contains name of the file, 1st argument will be stored in $1, 2nd will be stored in $2 and so on.
+
+strings      integer(numbers)    description
+==              -eq                equal
+!=              -ne                not equal
+>               -gt                 greater than
+>=              -ge                 greater than or equal
+<               -lt                 lesser than
+<=              -le                 less than or equal to
+
+
+---------------------------
+echo "eneter the numbers"
+read var
+read var1
+sum=`expr $var + $var1`
+
+echo "the addition of num is $sum"
+
+sub=`expr $var - $var1`
+
+echo "the substration of num is $sub"
+
+mul=`expr $var \* $var1`
+
+echo "the multiplication of num is $mul"
+
+div=`expr $var / $var1`
+
+echo "the division of num is $div"
+
+mod=`expr $var % $var1`
+
+---------------------------------------------
+echo $0 $1 $2 $# $* $@ $$ $! $?
+sum=`expr $1 + $2`
+echo "sum is $sum"
+
+sub=`expr $1 - $2`
+echo "sub is $sub"
+
+mul=`expr $1 \* $2`
+echo "mul is $mul"
+
+mod=`expr $1 % $2`
+echo "mod is $mod"
+
+div=`expr $1 / $2`
+echo "div is $div"
+
+-------------------------------------------------
+#!/bin/bash
+
+echo $0
+echo $0 | awk -F "/" '{print $NF}'
+echo $1 $2 $# $* $@ $? $! $0 $$
+----------------------------------------------------
+
+If statement:
+echo "Enter a value:"
+read num
+
+if [ "$num" -eq 10 ]
+then
+    echo "$num is 10"
+else
+        echo "$num is not equal to 10"
+fi
+
+nested if:
+if [ $1 -gt $2 ] && [ $1 -gt $3 ]
+then
+        echo "$1 is greater than $2 & $3"
+elif [ $2 -gt $3 ] && [ $2 -gt $1 ]
+then
+        echo "$2 is greater than $1 & $3"
+else
+        echo "$3 is gt $1 & $2"
+fi
+
+------------------------------------
+echo "enter the path"
+read name
+if [ -f $name ]
+then
+        echo "$name is a file"
+elif [ -d $name ]
+then
+        echo " $name is a directory"
+elif [ -L $name ]
+then
+        echo "$name is a linkfile"
+elif [ $tar $name ]
+then
+        echo " it is zip file"
+else
+        echo "it doesnot exist"
+fi
+
+-------------------------------------------------
+For loop:the for loop in shell scripting is one of the most useful tools to repeat a set of commands multiple times.
+echo "Enter a number:"
+#read num
+
+fact=1
+
+for (( i=1; i<=$1; i++ ))
+do
+    fact=$((fact * i))
+done
+
+echo "Factorial of $1 is: $fact"
+
+out side input:
+echo "Enter a number:"
+read num
+
+fact=1
+
+for (( i=1; i<=$num; i++ ))
+do
+    fact=$((fact * i))
+done
+
+echo "Factorial of $num is: $fact"
+
+-------------------------------------
+sum of n
+echo "Enter a number:"
+read num
+
+fact=0
+
+for (( i=1; i<=$num; i++ ))
+do
+    fact=$((fact + i))
+done
+
+echo "sum of $num is: $fact"
+
+---------------------------------------
+set -x
+ls *.html > outputoftxt
+
+while read line
+do
+        name=`expr $line | awk -F "." '{print $1}'`
+        mv $name.html $name.txt
+done < outputoftxt
+ls -l *.txt
+-----------------------------------------
+
+
+----------------------------------------
+#!/bin/bash
+
+memusage=`df -h . | awk -F " " 'NR==2 {print $(NF-1)}' | sed s/%//g`
+
+if [ $memusage -ge 40 ]
+then
+         mail -s "memory crossed threshold level"  vinayakvk062@gmail.com
+        echo "memory crossed threshold level of 40%"    
+else
+        echo "memory usage is less than the threshold level"
+fi
+------------------------------------------------
+df -h . | awk -F " " 'NR==2 {print $(NF-1)}' | sed s/%//g`
+
+-------------------------------------------------
+#!/bin/bash
+
+chkproc="sshd jenkins bash"
+
+for i in $chkproc
+do
+        ps -C $i
+        if [ $? -ne 0 ]
+        then
+        mail -s "Processes stopped working" vinayakvk062@gmail.com
+        echo "process $i is not running" 
+        #mail -s "Processes stopped working" vinayakvk062@gmail.com
+
+        fi
+done
+
+-------------------------------------------------------------
+              
+switch  case.
+#!/bin/bash
+
+day=`date '+%A'`
+case $day in
+        'Tuesday') mkdir -p /home/ubuntu/auto
+                ;;
+        'Wednesday') find /home/ubuntu -type f -mtime +30 > filelist
+                ;;
+        'Friday') cat filelist | xargs cp -t /home/ubuntu/auto/
+                ;;
+        'Thursday') ls -ltr /home/ubuntu
+                ;;
+        'Monday') sudo adduser vinayak1
+                ;;
+        'Saturday' | 'Sunday') echo "It's holiday"
+                ;;
+esac
